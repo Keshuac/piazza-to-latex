@@ -4,7 +4,6 @@ import re
 import subprocess, os
 
 import sys
-from pdflatex import PDFLaTeX
 
 def cleanhtml(raw_html):
   cleanr = re.compile('<.*?>')
@@ -68,9 +67,7 @@ os.system("pdflatex piazza-export-" + class_id + ".tex")
 if sys.platform.startswith('darwin'):
     subprocess.call(('open', "piazza-export-" + class_id + ".pdf"))
 elif os.name == 'nt':
-    pdfl = PDFLaTeX.from_texfile("piazza-export-" + class_id + ".tex")
-    pdf, log, completed_process = pdfl.create_pdf(keep_pdf_file=True, keep_log_file=True)
-    # os.system("piazza-export-" + class_id + ".pdf")
+    os.system("pdflatex piazza-export-" + class_id + ".pdf")
 elif os.name == 'posix':
     subprocess.call(('xdg-open', "piazza-export-" + class_id + ".pdf"))
 
