@@ -4,8 +4,6 @@ import re
 import subprocess, os
 
 import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
 
 def cleanhtml(raw_html):
   cleanr = re.compile('<.*?>')
@@ -52,7 +50,7 @@ for post in reversed(list(posts)):
   elif clean(post['history'][0]['content']) != "":
     text += "\\subsection*{Note}\n"
     text += clean(post['history'][0]['content']) + "\n"
-f = open("piazza-export-" + class_id + ".tex", "w+")
+f = open("piazza-export-" + class_id + ".tex", "w+",encoding='utf-8')
 f.write("\\documentclass[10pt]{article}\n")
 f.write("\\usepackage[utf8]{inputenc}\n")
 f.write("\\usepackage[margin=1in]{geometry}\n")
