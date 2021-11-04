@@ -4,6 +4,7 @@ import re
 import subprocess, os
 
 import sys
+from pdflatex import PDFLaTeX
 
 def cleanhtml(raw_html):
   cleanr = re.compile('<.*?>')
@@ -15,13 +16,13 @@ def clean(str):
   
 p = Piazza()
 p.user_login()
-class_id = raw_input("Enter class ID: ")
+class_id = input("Enter class ID: ")
 course_piazza = p.network(class_id)
 
 posts = course_piazza.iter_all_posts()
 
 text = ""
-print "Working..."
+print("Working...")
 for post in reversed(list(posts)):
   subject = clean(post['history'][0]['subject'])
   text += "\\section*{" + str(post['nr']) + ": " + subject + "}\n"
@@ -67,7 +68,9 @@ os.system("pdflatex piazza-export-" + class_id + ".tex")
 if sys.platform.startswith('darwin'):
     subprocess.call(('open', "piazza-export-" + class_id + ".pdf"))
 elif os.name == 'nt':
-    os.startfile("piazza-export-" + class_id + ".pdf")
+    pdfl = PDFLaTeX.from_texfile("piazza-export-" + class_id + ".tex")
+    pdf, log, completed_process = pdfl.create_pdf(keep_pdf_file=True, keep_log_file=True)
+    # os.system("piazza-export-" + class_id + ".pdf")
 elif os.name == 'posix':
     subprocess.call(('xdg-open', "piazza-export-" + class_id + ".pdf"))
 
